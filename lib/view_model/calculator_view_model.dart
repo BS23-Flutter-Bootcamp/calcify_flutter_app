@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import '../model/calculator_model.dart';
+import '../utils/operation.dart';
 
 class CalculatorViewModel extends ChangeNotifier {
   final CalculatorModel _model = CalculatorModel();
   String _result = '';
   String get result => _result;
+  late final _operationMap = {
+    Operation.add: _model.add,
+    Operation.subtract: _model.subtract,
+    Operation.multiply: _model.multiply,
+    Operation.divide: _model.divide,
+  };
 
   void calculate({
-    required String operation,
+    required Operation operation,
     required String firstText,
     required String secondText,
   }) {
@@ -18,16 +25,11 @@ class CalculatorViewModel extends ChangeNotifier {
       _result = "Invalid input";
     } else {
       try {
-        final operations = {
-          '+': _model.add,
-          '-': _model.subtract,
-          '*': _model.multiply,
-          '/': _model.divide,
-        };
-        if (operations.containsKey(operation)) {
-          _result = operations[operation]!(first, second).toString();
+        final func = _operationMap[operation];
+        if (func != null) {
+          _result = func(first, second).toString();
         } else {
-          _result = "Unknown operation";
+          _result = "Function is not defined";
         }
       } catch (e) {
         _result = e.toString();

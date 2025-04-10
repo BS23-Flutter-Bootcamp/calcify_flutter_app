@@ -2,9 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mini_calculator/view/widgets/calculator_button.dart';
 import 'package:provider/provider.dart';
 import '../view_model/calculator_view_model.dart';
+import '../utils/operation.dart';
 
-class CalculatorView extends StatelessWidget {
-  CalculatorView({super.key});
+class CalculatorView extends StatefulWidget {
+  const CalculatorView({super.key});
+
+  @override
+  State<CalculatorView> createState() => _CalculatorViewState();
+}
+
+class _CalculatorViewState extends State<CalculatorView> {
   final firstController = TextEditingController();
   final secondController = TextEditingController();
 
@@ -36,32 +43,14 @@ class CalculatorView extends StatelessWidget {
               spacing: 10,
               runSpacing: 10,
               alignment: WrapAlignment.center,
-              children: [
-                CalculatorButton(
-                  operation: "+",
-                  viewModel: viewModel,
-                  firstController: firstController,
-                  secondController: secondController,
-                ),
-                CalculatorButton(
-                  operation: "-",
-                  viewModel: viewModel,
-                  firstController: firstController,
-                  secondController: secondController,
-                ),
-                CalculatorButton(
-                  operation: "*",
-                  viewModel: viewModel,
-                  firstController: firstController,
-                  secondController: secondController,
-                ),
-                CalculatorButton(
-                  operation: "/",
-                  viewModel: viewModel,
-                  firstController: firstController,
-                  secondController: secondController,
-                ),
-              ],
+              children:
+                  Operation.values.map((op) {
+                    return CalculatorButton(
+                      operation: op,
+                      firstController: firstController,
+                      secondController: secondController,
+                    );
+                  }).toList(),
             ),
             const SizedBox(height: 16),
             Text(
