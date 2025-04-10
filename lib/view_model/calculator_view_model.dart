@@ -1,38 +1,35 @@
 import 'package:flutter/material.dart';
 import '../model/calculator_model.dart';
+import '../utils/operation.dart';
 
 class CalculatorViewModel extends ChangeNotifier {
   final CalculatorModel _model = CalculatorModel();
-
-  final TextEditingController firstController = TextEditingController();
-  final TextEditingController secondController = TextEditingController();
-
   String _result = '';
   String get result => _result;
+  late final _operationMap = {
+    Operation.add: _model.add,
+    Operation.subtract: _model.subtract,
+    Operation.multiply: _model.multiply,
+    Operation.divide: _model.divide,
+  };
 
-  void calculate(String operation) {
-    final first = double.tryParse(firstController.text);
-    final second = double.tryParse(secondController.text);
+  void calculate({
+    required Operation operation,
+    required String firstText,
+    required String secondText,
+  }) {
+    final first = double.tryParse(firstText);
+    final second = double.tryParse(secondText);
 
     if (first == null || second == null) {
       _result = "Invalid input";
     } else {
       try {
-        switch (operation) {
-          case 'Add':
-            _result = _model.add(first, second).toString();
-            break;
-          case 'Subtract':
-            _result = _model.subtract(first, second).toString();
-            break;
-          case 'Multiply':
-            _result = _model.multiply(first, second).toString();
-            break;
-          case 'Divide':
-            _result = _model.divide(first, second).toString();
-            break;
-          default:
-            _result = "Unknown operation";
+        final func = _operationMap[operation];
+        if (func != null) {
+          _result = func(first, second).toString();
+        } else {
+          _result = "Function is not defined";
         }
       } catch (e) {
         _result = e.toString();

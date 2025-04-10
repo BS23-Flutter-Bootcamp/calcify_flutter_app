@@ -3,9 +3,9 @@ import 'package:provider/provider.dart';
 import 'view/calculator_view.dart';
 import 'view_model/calculator_view_model.dart';
 
-
 void main() {
-  runApp(ChangeNotifierProvider(
+  runApp(
+    ChangeNotifierProvider(
       create: (_) => CalculatorViewModel(),
       child: const MyApp(),
     ),
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue),
       ),
-       home: const CalculatorView(),
+      home: CalculatorView(),
     );
   }
 }
